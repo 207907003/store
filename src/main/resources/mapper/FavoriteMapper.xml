@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xyz.store.mapper.FavoriteMapper">
+<!--    用于添加收藏-->
+    <insert id="addFavorite">
+        INsert into t_favorite(uid,pid , title,  price , images , created_user,  created_time)
+         VALUES(#{uid},#{pid} , #{title},  #{price} , #{images} , #{createdUser},  #{createdTime});
+    </insert>
+<!--    用于取消收藏-->
+    <delete id="deleteFavorite">
+        DELETE FROM
+            t_favorite
+        WHERE
+            uid=#{uid}
+        and
+            pid=#{pid}
+    </delete>
+
+    <select id="findFavoriteByUid" resultType="com.xyz.store.pojo.Favorite">
+        select * from t_favorite where uid=#{uid}
+    </select>
+</mapper>

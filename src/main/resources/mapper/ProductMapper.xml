@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xyz.store.mapper.ProductMapper">
+    <select id="findHotList" resultType="com.xyz.store.pojo.Product">
+        SELECT
+            *
+        FROM
+            t_product
+        WHERE
+            status=1
+        ORDER BY
+            priority DESC
+            LIMIT 0,4
+    </select>
+    <select id="findById" resultType="com.xyz.store.pojo.Product">
+        SELECT
+            *
+        FROM
+            t_product
+        WHERE
+            id=#{id}
+    </select>
+    <select id="findGoodList" resultType="com.xyz.store.pojo.Product">
+        SELECT *
+        from
+            t_product
+        ORDER BY
+            created_time LIMIT 0,4
+    </select>
+</mapper>

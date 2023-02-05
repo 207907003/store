@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xyz.store.mapper.AddressMapper">
+<!--    用于新增用户收货地址-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="aid">
+        INSERT INTO t_address (
+            uid, name, province_name, province_code, city_name, city_code, area_name, area_code, zip,
+            address, phone, tel, tag, is_default, created_user, created_time, modified_user, modified_time
+        ) VALUES (
+                     #{uid}, #{name}, #{provinceName}, #{provinceCode}, #{cityName}, #{cityCode}, #{areaName},
+                     #{areaCode}, #{zip}, #{address}, #{phone}, #{tel}, #{tag}, #{isDefault}, #{createdUser},
+                     #{createdTime}, #{modifiedUser}, #{modifiedTime}
+                 )
+    </insert>
+<!--    用于设置默认地址第一步,将所有地址设置非默认0-->
+    <update id="changeDefaultAddressOne">
+        update t_address set is_default=0 where uid=#{uid}
+    </update>
+    <!--    用于设置默认地址第二步,将所选地址设置默认1-->
+    <update id="changeDefaultAddressTwo">
+        update t_address set is_default=1,modified_user=#{modifiedUser}, modified_time=#{modifiedTime} where aid=#{aid}
+    </update>
+<!--    用于删除用户收货地址-->
+    <delete id="deleteByAid">
+        DELETE FROM
+            t_address
+        WHERE
+            aid=#{aid}
+    </delete>
+
+    <!--    用于查询收货地址数量-->
+    <select id="countByUid" resultType="java.lang.Integer">
+        SELECT
+            COUNT(*)
+        FROM
+            t_address
+        WHERE
+            uid=#{uid}
+    </select>
+<!--    用于展示收货地址-->
+    <select id="findAllAddress" resultType="com.xyz.store.pojo.Address">
+
+
+            SELECT
+                *
+            FROM
+                t_address
+            WHERE
+                uid=#{uid}
+            ORDER BY
+                is_default DESC, created_time DESC
+
+    </select>
+<!--    查询用户最近修改的收货地址-->
+    <select id="findLastModified" resultType="com.xyz.store.pojo.Address">
+        SELECT
+            *
+        FROM
+            t_address
+        WHERE
+            uid=#{uid}
+        ORDER BY
+            modified_time DESC
+            LIMIT 0,1
+    </select>
+<!--    用于查询所选地址是不是默认地址-->
+    <select id="findByAid" resultType="com.xyz.store.pojo.Address">
+        select * from t_address where aid=#{aid}
+    </select>
+
+</mapper>
