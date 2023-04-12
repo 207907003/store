@@ -9,11 +9,13 @@ import com.xyz.store.service.IAddressService;
 import com.xyz.store.service.ICartService;
 import com.xyz.store.service.IOrderService;
 import com.xyz.store.service.ex.InsertException;
+import com.xyz.store.service.ex.OrderNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /** 处理订单和订单数据的业务层实现类 */
@@ -97,5 +99,35 @@ public class OrderServiceImpl implements IOrderService {
 
         // 返回
         return order;
+    }
+
+    @Override
+    public HashMap<Integer, List<Order>> showOrder() {
+        /**
+         * 创建hashmap存放订单
+         */
+        HashMap<Integer, List<Order>> hashMap = new HashMap<>();
+        //查询所有oid
+        List<Integer> oidByOrder = orderMapper.findOidByOrder();
+        if (oidByOrder==null){
+            throw new OrderNotFoundException("还没有订单!");
+        }
+        //放入hashmap
+        for (Integer integer : oidByOrder) {
+            List<Order> orders = orderMapper.showOrder(integer);
+            hashMap.put(orders.get(0).getOid(),orders);
+        }
+        return hashMap ;
+    }
+
+    /**
+     * 展示order详细信息
+     * @param id orderitm信息
+     * @return
+     */
+    @Override
+    public Order showOrderInfo(Integer id) {
+
+        return orderMapper.findOrderInfoById(id);
     }
 }

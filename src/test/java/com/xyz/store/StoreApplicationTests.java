@@ -2,13 +2,11 @@ package com.xyz.store;
 
 
 
-import com.xyz.store.mapper.CartMapper;
-import com.xyz.store.mapper.FavoriteMapper;
-import com.xyz.store.mapper.SearchMapper;
-import com.xyz.store.mapper.UserMapper;
+import com.xyz.store.mapper.*;
 import com.xyz.store.pojo.*;
 import com.xyz.store.service.ICartService;
 import com.xyz.store.service.IFavoriteService;
+import com.xyz.store.service.IOrderService;
 import com.xyz.store.service.IUserService;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
@@ -17,16 +15,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @SpringBootTest
 @MapperScan("com.xyz.store.mapper")
 class StoreApplicationTests {
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private OrderMapper orderMapper;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private IOrderService orderService;
     @Autowired
     private CartMapper cartMapper;
     @Autowired
@@ -117,7 +119,46 @@ class StoreApplicationTests {
 
 
     }
-}
+//    @Test
+//    public void testSbC() {
+//        List<Integer> integers = orderService.showOrder();
+//        System.out.println(integers);
+//
+//
+//    }
+//    @Test
+//    public void testSbCd() {
+//        List<Integer> integers = orderService.showOrder();
+//        System.out.println(integers);
+//        HashMap<Integer, List<Order>> HashMap = new HashMap<>();
+//        for (Integer integer : integers) {
+//            List<Order> orders = orderMapper.showOrder(integer);
+//            HashMap.put(orders.get(0).getOid(),orders);
+//        }
+//        for (Integer key : HashMap.keySet()) {
+//            System.out.println("key= "+ key + " and value= " + HashMap .get(key));
+//        }
+
+
+
+    @Test
+public void aaaaaa(){
+        HashMap<Integer, List<Order>> map = orderService.showOrder();
+        for (Integer test:map.keySet()
+             ) {
+            System.out.println(map.get(test));
+
+        }
+    }
+    @Test
+    public void orderinfo(){
+        Order orderInfoById = orderMapper.findOrderInfoById(1);
+        System.out.println(orderInfoById);
+    }
+
+    }
+
+
 
 
 

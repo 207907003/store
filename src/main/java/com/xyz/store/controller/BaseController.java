@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class BaseController  {
+public class BaseController {
 
     @ExceptionHandler({ServiceException.class,FileUploadIOException.class})
     public JsonResult<Void> handleException(Throwable e){
@@ -81,6 +81,10 @@ public class BaseController  {
         else if (e instanceof AlreadyExistsException) {
             result.setState(6009);
             result.setMessage("数据已经存在异常!");
+        }
+        else if (e instanceof OrderNotFoundException) {
+            result.setState(60010);
+            result.setMessage("没有订单异常!");
         }
 
 

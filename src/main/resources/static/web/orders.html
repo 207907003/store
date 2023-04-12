@@ -123,7 +123,7 @@
 				</div>
 			</div>
 			<!--左侧导航结束-->
-			<div class="col-md-10">
+			<div class="col-md-10" id="test">
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<p class="panel-title">
@@ -324,6 +324,84 @@
 	$(document).ready(function() {
 		login_username();
 	});
+
+	$.ajax({
+		url: "/orders/show_order",
+		type: "GET",
+		dataType: "JSON",
+		success: function(json) {
+			$("#test").empty();
+			console.log("删除成功!");
+			$.each(json.data, function (key, value) {
+			  let head='<div class="panel panel-default">\n' +
+					  '\t\t\t\t\t<div class="panel-heading">\n' +
+					  '\t\t\t\t\t\t<p class="panel-title">\n' +
+					  '\t\t\t\t\t\t\t订单号：#{oid}，下单时间：#{time} ，收货人：#{recvname}' +
+					  '\t\t\t\t\t\t</p>\n' +
+					  '\t\t\t\t\t</div>\n' +
+					  '\t\t\t\t\t<div class="panel-body">\n' +
+					  '\t\t\t\t\t\t<table class="orders-table" width="100%">\n' +
+					  '\t\t\t\t\t\t\t<thead>\n' +
+					  '\t\t\t\t\t\t\t\t<tr>\n' +
+					  '\t\t\t\t\t\t\t\t\t<th width="15%"></th>\n' +
+					  '\t\t\t\t\t\t\t\t\t<th width="30%">商品</th>\n' +
+					  '\t\t\t\t\t\t\t\t\t<th width="8%">单价</th>\n' +
+					  '\t\t\t\t\t\t\t\t\t<th width="8%">数量</th>\n' +
+					  '\t\t\t\t\t\t\t\t\t<th width="9%">小计</th>\n' +
+					  '\t\t\t\t\t\t\t\t\t<th width="10%">售后</th>\n' +
+					  '\t\t\t\t\t\t\t\t\t<th width="10%">状态</th>\n' +
+					  '\t\t\t\t\t\t\t\t\t<th width="10%">操作</th>\n' +
+					  '\t\t\t\t\t\t\t\t</tr>\n' +
+					  '\t\t\t\t\t\t\t</thead>\n' +
+					  '\t\t\t\t\t\t\t<tbody class="orders-body" id="#{key}">';
+				head = head.replace(/#{key}/g, key);
+				head = head.replace(/#{oid}/g, key);
+				head = head.replace(/#{time}/g, value[0].orderTime);
+				head = head.replace(/#{recvname}/g, value[0].recvName);
+				$("#test").append(head);
+				console.log('key'+key);
+
+				for (let i = 0; i < value.length; i++) {
+					let body='<tr>\n' +
+							'\t\t\t\t\t\t\t\t\t<td><img src="..#{image}collect.png" class="img-responsive"></td>\n' +
+							'\t\t\t\t\t\t\t\t\t<td>#{title}</td>\n' +
+							'\t\t\t\t\t\t\t\t\t<td>¥<span>#{price}</span></td>\n' +
+							'\t\t\t\t\t\t\t\t\t<td>#{num}</td>\n' +
+							'\t\t\t\t\t\t\t\t\t<td>¥<span>#{price}</span></td>\n' +
+							'\t\t\t\t\t\t\t\t\t<td><a href="#">申请售后</a></td>\n' +
+							'\t\t\t\t\t\t\t\t\t<td>\n' +
+							'\t\t\t\t\t\t\t\t\t\t<div>已发货</div>\n' +
+							'\t\t\t\t\t\t\t\t\t\t<div><a href="orderInfo.html?test=#{id}">订单详情</a></div>\n' +
+							'\t\t\t\t\t\t\t\t\t</td>\n' +
+							'\t\t\t\t\t\t\t\t\t<td><a href="#" class="btn btn-default btn-xs" onclick= enterrecv()>确认收货</a></td>\n' +
+							'\t\t\t\t\t\t\t\t</tr>'+'</tbody>'+'</table>'+'</div>'+'</div>';
+
+					  body=body.replace(/#{image}/g,value[i].orderItem[0].image);
+					body=body.replace(/#{num}/g,value[i].orderItem[0].num);
+					body=body.replace(/#{price}/g,value[i].orderItem[0].price);
+					body=body.replace(/#{title}/g,value[i].orderItem[0].title);
+					body=body.replace(/#{id}/g,value[i].orderItem[0].id);
+
+					  $("#"+key).append(body);
+
+					console.log(value[i].orderItem[0].title)
+				}
+
+
+
+			});
+
+
+			}
+
+
+
+	});
+	function enterrecv(){
+		alert("确认收货成功!");
+	}
+
+
 </script>
 
 </html>

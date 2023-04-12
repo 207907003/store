@@ -2,6 +2,9 @@ package com.xyz.store.service;
 
 import com.xyz.store.pojo.Order;
 
+import java.util.HashMap;
+import java.util.List;
+
 /** 处理订单和订单数据的业务层接口 */
 public interface IOrderService {
     /**
@@ -13,4 +16,16 @@ public interface IOrderService {
      * @return 成功创建的订单数据
      */
     Order create(Integer aid, Integer[] cids, Integer uid, String username);
+
+    /**
+     * 用于展示一对多订单
+     * @return
+     */
+    HashMap<Integer,List<Order>> showOrder();
+
+    /**
+     * 用于展示order信息
+     * @return
+     */
+    Order showOrderInfo(Integer id);
 }

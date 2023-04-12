@@ -24,4 +24,40 @@
                      #{createdTime}, #{modifiedUser}, #{modifiedTime}
                  )
     </insert>
+<!--    查找所有oid-->
+    <select id="findOidByOrder" resultType="java.lang.Integer">
+        select oid from t_order
+    </select>
+<!--    在查找所有oid后找到所有对应订单-->
+    <select id="showOrder" resultMap="orderMap">
+        select t_order.oid,recv_name,recv_phone,recv_province,
+               recv_city,recv_area,recv_address,
+               total_price,status,order_time,
+               pid,title,
+               image,id,
+               price,num,
+               t_order_item.oid as item_oid
+               from
+                     t_order
+                         LEFT JOIN
+                         t_order_item
+                             on
+                                 t_order.oid=t_order_item.oid
+                                    where t_order.oid=#{t_order_oid}
+    </select>
+<!--    通过orderitem的id查找具体信息,用于展示商品详情-->
+    <select id="findOrderInfoById" resultMap="orderMap">
+        SELECT * from t_order LEFT JOIN t_order_item on t_order.oid=t_order_item.oid WHERE id=#{id}
+    </select>
+    <resultMap id="orderMap" type="com.xyz.store.pojo.Order" autoMapping="true">
+      <collection property="orderItem" ofType="com.xyz.store.pojo.OrderItem">
+          <id property="oid" column="item_oid"/>
+          <result property="pid" column="pid"/>
+          <result property="id" column="id"/>
+          <result property="title" column="title"/>
+          <result property="image" column="image"/>
+          <result property="price" column="price"/>
+          <result property="num" column="num"/>
+      </collection>
+    </resultMap>
 </mapper>
